@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Легкость с Котом - Презентация Концепта</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        app: {
+                            bg: '#FDFBF7',      /* Светло-бежевый фон */
+                            peach: '#FFD4C4',   /* Нежно-персиковый */
+                            peachDark: '#FFB39A',
+                            mint: '#D1F2EB',    /* Мятный */
+                            mintDark: '#A3E4D7',
+                            cream: '#FFF5E1',   /* Кремовый */
+                            text: '#4A4A4A',    /* Мягкий темный для текста (не черный для 45+) */
+                            textLight: '#8A8A8A',
+                            white: '#FFFFFF',
+                            orange: '#F4A261',  /* Цвет кота Матвея */
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(244, 162, 97, 0.15)',
+                        'card': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #FDFBF7 0%, #FFF5E1 50%, #D1F2EB 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Phone mockup frame */
+        .phone-frame {
+            width: 390px;
+            height: 844px;
+            background-color: #FDFBF7;
+            border-radius: 50px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 12px #FFFFFF, 0 0 0 14px #E5E7EB;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up { animation: slideUp 0.3s ease-out forwards; }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        /* Circular Progress Chart */
+        .circular-chart {
+            display: block;
+            margin: 0 auto;
+            max-width: 80%;
+            max-height: 250px;
+        }
+        .circle-bg {
+            fill: none;
+            stroke: #eee;
+            stroke-width: 3.8;
+        }
+        .circle {
+            fill: none;
+            stroke-width: 3.8;
+            stroke-linecap: round;
+            transition: stroke-dasharray 1s ease-out;
+        }
+
+        /* Scanner Laser */
+        .scanner-laser {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #F4A261;
+            box-shadow: 0 0 10px #F4A261, 0 0 20px #F4A261;
+            animation: scan 2s infinite linear;
+        }
+        @keyframes scan {
+            0% { top: 10%; }
+            50% { top: 90%; }
+            100% { top: 10%; }
+        }
+
+        /* Custom Checkbox */
+        .task-checkbox:checked + div {
+            background-color: #A3E4D7;
+            border-color: #A3E4D7;
+        }
+        .task-checkbox:checked + div i { opacity: 1; }
+
+        /* Breathing Animation for Meditation */
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); box-shadow: 0 10px 40px -10px rgba(163, 228, 215, 0.6); }
+        }
+        .animate-breathe { animation: breathe 8s infinite ease-in-out; }
+    </style>
+</head>
+<body class="text-app-text antialiased p-4 md:p-8">
+
+    <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-app-peachDark rounded-full mix-blend-multiply filter blur-[100px] opacity-40"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-app-mintDark rounded-full mix-blend-multiply filter blur-[100px] opacity-40"></div>
+    </div>
+
+    <!-- Presentation Wrapper -->
+    <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-12">
+        
+        <!-- Investor Pitch / Descriptions -->
+        <div class="hidden lg:block w-1/3 space-y-8">
+            <h1 class="text-4xl font-extrabold text-gray-800 leading-tight">
+                Легкость с Котом <i class="ph-fill ph-paw-print text-app-orange"></i>
+            </h1>
+            <p class="text-lg text-gray-600">
+                Премиальное mini-app для Telegram. Мягкое снижение веса для женщин 45+ без стресса, сложных диет и изнурительных тренировок.
+            </p>
+            <div class="space-y-4">
+                <div class="bg-white p-4 rounded-2xl shadow-card flex items-start gap-4">
+                    <div class="p-3 bg-app-mint rounded-xl text-teal-700">
+                        <i class="ph ph-magic-wand text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold">ИИ-распознавание еды</h3>
+                        <p class="text-sm text-gray-500">Оценка КБЖУ по фото за 2 секунды.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-card flex items-start gap-4">
+                    <div class="p-3 bg-app-peach rounded-xl text-orange-700">
+                        <i class="ph ph-smiley text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold">Эмоциональная поддержка</h3>
+                        <p class="text-sm text-gray-500">Кот Матвей мотивирует и заботится.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-card flex items-start gap-4">
+                    <div class="p-3 bg-app-cream rounded-xl text-yellow-700">
+                        <i class="ph ph-yin-yang text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold">Мягкая йога</h3>
+                        <p class="text-sm text-gray-500">Упражнения для здоровья суставов и спины.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm text-gray-400 font-semibold uppercase tracking-wider mt-8">Интерактивный прототип (нажмите справа) 👉</p>
+        </div>
+
+        <!-- Mobile Device Mockup -->
+        <div class="phone-frame shadow-2xl">
+            
+            <!-- Status Bar Placeholder -->
+            <div class="h-12 w-full flex justify-between items-center px-6 text-sm font-semibold z-50 bg-transparent absolute top-0">
+                <span>9:41</span>
+                <div class="flex gap-1.5 items-center">
+                    <i class="ph-fill ph-cell-signal-full"></i>
+                    <i class="ph-fill ph-wifi-high"></i>
+                    <i class="ph-fill ph-battery-full text-lg"></i>
+                </div>
+            </div>
+
+            <!-- App Content Area -->
+            <div id="app-content" class="flex-1 overflow-y-auto no-scrollbar relative bg-app-bg pt-12 pb-24">
+                
+                <!-- 1. WELCOME SCREEN -->
+                <div id="screen-welcome" class="absolute inset-0 bg-app-bg z-40 flex flex-col items-center justify-center p-6 text-center fade-in">
+                    <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-soft mb-8 relative">
+                        <!-- Изображение рыжего кота Матвея -->
+                        <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&q=80&w=400&h=400" alt="Кот Матвей" class="w-full h-full object-cover">
+                    </div>
+                    <h1 class="text-3xl font-extrabold mb-4 text-gray-800 leading-tight">Добро пожаловать в<br><span class="text-app-orange">Легкость с Котом</span></h1>
+                    <p class="text-app-textLight text-lg mb-10 px-4">Без диет, стресса и чувства вины. Только любовь к себе и своему телу.</p>
+                    
+                    <button onclick="switchScreen('home')" class="w-full bg-gradient-to-r from-app-peachDark to-app-orange text-white font-bold text-lg py-4 rounded-3xl shadow-soft transform transition hover:scale-105 active:scale-95">
+                        Начать путь к легкости
+                    </button>
+                </div>
+
+                <!-- 2. HOME SCREEN -->
+                <div id="screen-home" class="hidden min-h-full p-5 fade-in">
+                    <!-- Header -->
+                    <div class="flex items-center gap-4 mb-6 mt-4">
+                        <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&q=80&w=100&h=100" alt="Матвей" class="w-14 h-14 rounded-full border-2 border-white shadow-sm object-cover">
+                        <div>
+                            <p class="text-sm text-app-textLight">Ваш помощник Матвей</p>
+                            <p class="font-bold text-lg">«Ты прекрасно выглядишь!»</p>
+                        </div>
+                    </div>
+
+                    <!-- Weight Card -->
+                    <div class="bg-white rounded-3xl p-5 shadow-card mb-5">
+                        <div class="flex justify-between items-center mb-2">
+                            <h2 class="font-bold text-gray-700">Мой вес</h2>
+                            <span class="text-app-orange text-sm font-bold bg-app-cream px-3 py-1 rounded-full">Цель: 65 кг</span>
+                        </div>
+                        <div class="flex items-end gap-2 mb-4">
+                            <span class="text-4xl font-extrabold text-gray-800">72.4</span>
+                            <span class="text-lg text-gray-500 mb-1">кг</span>
+                        </div>
+                        <!-- Progress bar -->
+                        <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                            <div class="bg-app-mintDark h-full rounded-full w-[40%]"></div>
+                        </div>
+                        <p class="text-xs text-app-textLight mt-2 text-right">Осталось 7.4 кг</p>
+                    </div>
+
+                    <!-- Widgets Row -->
+                    <div class="flex gap-4 mb-5">
+                        <!-- Water -->
+                        <div class="bg-app-mint bg-opacity-30 rounded-3xl p-4 flex-1 shadow-inner-soft">
+                            <div class="flex items-center gap-2 mb-3">
+                                <i class="ph-fill ph-drop text-teal-500 text-xl"></i>
+                                <h3 class="font-bold text-teal-800 text-sm">Вода</h3>
+                            </div>
+                            <p class="font-bold text-xl text-teal-900 mb-2">3 / 8</p>
+                            <div class="flex gap-1">
+                                <div class="w-full h-1.5 bg-teal-500 rounded-full"></div>
+                                <div class="w-full h-1.5 bg-teal-500 rounded-full"></div>
+                                <div class="w-full h-1.5 bg-teal-500 rounded-full"></div>
+                                <div class="w-full h-1.5 bg-teal-200 rounded-full"></div>
+                                <div class="w-full h-1.5 bg-teal-200 rounded-full"></div>
+                            </div>
+                        </div>
+                        <!-- Steps -->
+                        <div class="bg-app-peach bg-opacity-30 rounded-3xl p-4 flex-1 shadow-inner-soft">
+                            <div class="flex items-center gap-2 mb-3">
+                                <i class="ph-fill ph-sneaker text-orange-500 text-xl"></i>
+                                <h3 class="font-bold text-orange-800 text-sm">Шаги</h3>
+                            </div>
+                            <p class="font-bold text-xl text-orange-900 mb-2">4,230</p>
+                            <div class="w-full bg-orange-200 rounded-full h-1.5">
+                                <div class="bg-orange-500 h-full rounded-full w-[60%]"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Motivation -->
+                    <div class="bg-white rounded-3xl p-5 shadow-card flex items-center gap-4 mb-5 border border-app-cream">
+                        <i class="ph-fill ph-star text-yellow-400 text-3xl"></i>
+                        <p class="text-sm font-semibold text-gray-700">Маленькие шаги ведут к большим результатам. Ты молодец!</p>
+                    </div>
+
+                    <button onclick="switchScreen('tasks')" class="w-full bg-white border-2 border-app-mintDark text-teal-700 font-bold text-lg py-4 rounded-3xl shadow-sm hover:bg-app-mint transition">
+                        Отметить выполнение
+                    </button>
+                </div>
+
+                <!-- 3. NUTRITION SCREEN (КБЖУ) -->
+                <div id="screen-food" class="hidden min-h-full p-5 fade-in">
+                    <h2 class="text-2xl font-extrabold mb-4 text-center">Питание</h2>
+                    
+                    <!-- Cat Hint -->
+                    <div class="bg-app-cream rounded-2xl p-4 flex items-center gap-3 mb-6">
+                        <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&q=80&w=100&h=100" class="w-10 h-10 rounded-full object-cover">
+                        <p class="text-sm font-semibold text-gray-700 italic">«Не голодаем, а кормим тело правильно!»</p>
+                    </div>
+
+                    <!-- Circular Chart -->
+                    <div class="bg-white rounded-3xl p-6 shadow-card mb-6 relative">
+                        <svg viewBox="0 0 36 36" class="circular-chart text-app-mintDark">
+                            <path class="circle-bg"
+                                d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                            />
+                            <path class="circle"
+                                stroke="currentColor"
+                                stroke-dasharray="65, 100"
+                                d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                            />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-2">
+                            <span class="text-3xl font-extrabold text-gray-800">1140</span>
+                            <span class="text-sm text-gray-500">из 1600 ккал</span>
+                        </div>
+
+                        <!-- Macros -->
+                        <div class="flex justify-between mt-6 px-2">
+                            <div class="text-center">
+                                <p class="text-xs text-gray-400 mb-1">Белки</p>
+                                <p class="font-bold text-gray-700">45 / 80г</p>
+                                <div class="w-12 h-1 bg-gray-100 rounded-full mt-1 mx-auto"><div class="h-full bg-blue-400 rounded-full w-1/2"></div></div>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-xs text-gray-400 mb-1">Жиры</p>
+                                <p class="font-bold text-gray-700">30 / 60г</p>
+                                <div class="w-12 h-1 bg-gray-100 rounded-full mt-1 mx-auto"><div class="h-full bg-yellow-400 rounded-full w-1/2"></div></div>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-xs text-gray-400 mb-1">Углеводы</p>
+                                <p class="font-bold text-gray-700">120 / 180г</p>
+                                <div class="w-12 h-1 bg-gray-100 rounded-full mt-1 mx-auto"><div class="h-full bg-green-400 rounded-full w-2/3"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Button -->
+                    <button onclick="openAIModal()" class="w-full mb-6 bg-gradient-to-r from-app-peachDark to-app-orange text-white rounded-3xl p-4 shadow-soft flex items-center justify-center gap-3 transform transition active:scale-95">
+                        <i class="ph-fill ph-camera text-2xl"></i>
+                        <span class="font-bold text-lg">Определить еду по фото</span>
+                        <div class="bg-white text-app-orange text-xs font-bold px-2 py-1 rounded-lg ml-2">ИИ</div>
+                    </button>
+
+                    <!-- Meal Diary -->
+                    <div class="space-y-4 pb-4">
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-500"><i class="ph-fill ph-sun"></i></div>
+                                <div>
+                                    <h3 class="font-bold text-gray-800">Завтрак</h3>
+                                    <p class="text-xs text-gray-400">Овсянка, кофе</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-gray-700">320 <span class="text-xs font-normal text-gray-400">ккал</span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex justify-between items-center opacity-60">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500"><i class="ph-fill ph-cloud-sun"></i></div>
+                                <h3 class="font-bold text-gray-800">Обед</h3>
+                            </div>
+                            <button class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-app-mint hover:text-teal-700 transition"><i class="ph-bold ph-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. TASKS SCREEN -->
+                <div id="screen-tasks" class="hidden min-h-full p-5 fade-in">
+                    <h2 class="text-2xl font-extrabold mb-6 text-center">План на сегодня</h2>
+                    
+                    <div class="space-y-4">
+                        <!-- Task 1 -->
+                        <label class="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex items-center gap-4 cursor-pointer">
+                            <input type="checkbox" class="task-checkbox hidden">
+                            <div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-colors">
+                                <i class="ph-bold ph-check text-white opacity-0 transition-opacity"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-800 text-lg">Выпить стакан воды</h3>
+                                <p class="text-sm text-gray-400">Утро натощак</p>
+                            </div>
+                            <i class="ph-fill ph-drop text-teal-400 text-2xl"></i>
+                        </label>
+
+                        <!-- Task 2 -->
+                        <label class="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex items-center gap-4 cursor-pointer">
+                            <input type="checkbox" class="task-checkbox hidden">
+                            <div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-colors">
+                                <i class="ph-bold ph-check text-white opacity-0 transition-opacity"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-800 text-lg">Пройти 5000 шагов</h3>
+                                <p class="text-sm text-gray-400">Легкая прогулка</p>
+                            </div>
+                            <i class="ph-fill ph-sneaker text-orange-400 text-2xl"></i>
+                        </label>
+
+                        <!-- Task 3 -->
+                        <label class="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex items-center gap-4 cursor-pointer">
+                            <input type="checkbox" class="task-checkbox hidden">
+                            <div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-colors">
+                                <i class="ph-bold ph-check text-white opacity-0 transition-opacity"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-800 text-lg">Мягкая зарядка</h3>
+                                <p class="text-sm text-gray-400">10 минут для суставов</p>
+                            </div>
+                            <i class="ph-fill ph-person-simple-stretch text-purple-400 text-2xl"></i>
+                        </label>
+                        
+                        <!-- Task 4 -->
+                        <label class="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex items-center gap-4 cursor-pointer">
+                            <input type="checkbox" class="task-checkbox hidden">
+                            <div class="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center transition-colors">
+                                <i class="ph-bold ph-check text-white opacity-0 transition-opacity"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-800 text-lg">Лечь спать до 23:00</h3>
+                                <p class="text-sm text-gray-400">Для восстановления</p>
+                            </div>
+                            <i class="ph-fill ph-moon-stars text-indigo-400 text-2xl"></i>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 5. YOGA SCREEN -->
+                <div id="screen-yoga" class="hidden min-h-full p-5 fade-in">
+                    <h2 class="text-2xl font-extrabold mb-2">Здоровье</h2>
+                    <p class="text-gray-500 text-sm mb-6">Мягкие практики для женщин 45+</p>
+
+                    <div class="space-y-5">
+                        <!-- Video Card 1 -->
+                        <div class="bg-white rounded-3xl overflow-hidden shadow-card relative">
+                            <div class="h-40 bg-gray-200 relative">
+                                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-80" alt="Йога">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-14 h-14 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-app-peachDark shadow-lg cursor-pointer hover:scale-110 transition">
+                                        <i class="ph-fill ph-play text-2xl ml-1"></i>
+                                    </div>
+                                </div>
+                                <div class="absolute top-3 left-3 bg-white px-3 py-1 text-xs font-bold rounded-full shadow-sm text-gray-700">12 мин</div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-gray-800 text-lg">Утренняя разминка</h3>
+                                <p class="text-sm text-gray-500 mt-1">Пробуждение тела без резких движений</p>
+                            </div>
+                        </div>
+
+                        <!-- Video Card 2 -->
+                        <div class="bg-white rounded-3xl overflow-hidden shadow-card relative">
+                            <div class="h-40 bg-gray-200 relative">
+                                <img src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-80" alt="Спина">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-14 h-14 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-app-mintDark shadow-lg cursor-pointer hover:scale-110 transition">
+                                        <i class="ph-fill ph-play text-2xl ml-1"></i>
+                                    </div>
+                                </div>
+                                <div class="absolute top-3 left-3 bg-white px-3 py-1 text-xs font-bold rounded-full shadow-sm text-gray-700">15 мин</div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-gray-800 text-lg">Здоровая спина и шея</h3>
+                                <p class="text-sm text-gray-500 mt-1">Снятие напряжения после рабочего дня</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. MEDITATION SCREEN -->
+                <div id="screen-meditation" class="hidden min-h-full p-5 fade-in">
+                    <h2 class="text-2xl font-extrabold mb-2">Медитации</h2>
+                    <p class="text-gray-500 text-sm mb-6">Снятие стресса и глубокое расслабление</p>
+
+                    <!-- Подсказка Кота -->
+                    <div class="bg-app-mint bg-opacity-30 rounded-2xl p-4 flex items-center gap-3 mb-6 shadow-inner-soft">
+                        <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&q=80&w=100&h=100" class="w-10 h-10 rounded-full object-cover shadow-sm">
+                        <p class="text-sm font-semibold text-teal-800 italic">«Стресс мешает стройности. Давай просто подышим вместе?»</p>
+                    </div>
+
+                    <!-- Виджет Дыхания -->
+                    <div class="bg-white rounded-3xl p-6 shadow-card mb-6 flex flex-col items-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-app-mint opacity-20 pointer-events-none"></div>
+                        <h3 class="font-bold text-gray-800 mb-6 text-lg relative z-10">Успокаивающее дыхание</h3>
+                        
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-app-mintDark to-app-peachDark flex items-center justify-center animate-breathe shadow-lg relative z-10 mb-4 cursor-pointer hover:shadow-xl transition">
+                            <div class="w-28 h-28 rounded-full bg-white bg-opacity-90 flex flex-col items-center justify-center">
+                                <i class="ph-fill ph-wind text-3xl text-teal-500 mb-1"></i>
+                                <span class="text-teal-700 font-bold text-sm uppercase tracking-wider mt-1">Вдох</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-400 text-center relative z-10">Синхронизируйте дыхание с кругом.<br>Снимает тревогу за 2 минуты.</p>
+                    </div>
+
+                    <h3 class="font-bold text-gray-800 mb-4 ml-1">Аудио-практики</h3>
+                    
+                    <div class="space-y-3 pb-6">
+                        <!-- Аудио 1 -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex items-center gap-4 cursor-pointer hover:bg-gray-50 transition">
+                            <div class="w-12 h-12 rounded-full bg-indigo-50 text-indigo-400 flex items-center justify-center">
+                                <i class="ph-fill ph-moon-stars text-2xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-gray-800">Глубокий сон</h4>
+                                <p class="text-xs text-gray-400">Мягкое погружение в отдых</p>
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-400">
+                                <span class="text-xs font-bold">10 мин</span>
+                                <i class="ph-fill ph-play-circle text-2xl text-app-peachDark"></i>
+                            </div>
+                        </div>
+
+                        <!-- Аудио 2 -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex items-center gap-4 cursor-pointer hover:bg-gray-50 transition">
+                            <div class="w-12 h-12 rounded-full bg-orange-50 text-orange-400 flex items-center justify-center">
+                                <i class="ph-fill ph-sun-horizon text-2xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-gray-800">Утро без тревоги</h4>
+                                <p class="text-xs text-gray-400">Настрой на легкий день</p>
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-400">
+                                <span class="text-xs font-bold">5 мин</span>
+                                <i class="ph-fill ph-play-circle text-2xl text-app-peachDark"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. SHOP SCREEN -->
+                <div id="screen-shop" class="hidden min-h-full p-5 fade-in text-center">
+                    <h2 class="text-2xl font-extrabold mb-6">Котик Матвей</h2>
+                    
+                    <!-- Cat Avatar Area -->
+                    <div class="relative w-40 h-40 mx-auto mb-6">
+                        <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&q=80&w=300&h=300" class="w-full h-full rounded-full object-cover shadow-soft border-4 border-white">
+                        <div class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-white px-4 py-1.5 rounded-full shadow-sm border border-gray-100 flex items-center gap-1 font-bold text-gray-700">
+                            150 <i class="ph-fill ph-fish-simple text-blue-400"></i>
+                        </div>
+                    </div>
+
+                    <p class="text-gray-500 text-sm mb-6">Радуйте Матвея подарками за ваши достижения!</p>
+
+                    <!-- Shop Grid -->
+                    <div class="grid grid-cols-2 gap-4 text-left">
+                        <!-- Item 1 -->
+                        <div class="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 text-center relative overflow-hidden">
+                            <i class="ph ph-sunglasses text-4xl text-gray-400 mb-2 mt-2"></i>
+                            <h3 class="font-bold text-sm text-gray-700 mb-2">Очки</h3>
+                            <button class="bg-app-cream text-app-orange font-bold text-xs py-2 px-4 rounded-full w-full hover:bg-app-peach transition">50 <i class="ph-fill ph-fish-simple"></i></button>
+                        </div>
+                        <!-- Item 2 -->
+                        <div class="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 text-center relative overflow-hidden">
+                            <i class="ph ph-baseball-cap text-4xl text-gray-400 mb-2 mt-2"></i>
+                            <h3 class="font-bold text-sm text-gray-700 mb-2">Кепка</h3>
+                            <button class="bg-app-cream text-app-orange font-bold text-xs py-2 px-4 rounded-full w-full hover:bg-app-peach transition">80 <i class="ph-fill ph-fish-simple"></i></button>
+                        </div>
+                        <!-- Item 3 -->
+                        <div class="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 text-center relative overflow-hidden">
+                            <i class="ph ph-bowtie text-4xl text-gray-400 mb-2 mt-2"></i>
+                            <h3 class="font-bold text-sm text-gray-700 mb-2">Бабочка</h3>
+                            <button class="bg-gray-100 text-gray-400 font-bold text-xs py-2 px-4 rounded-full w-full">Куплено</button>
+                        </div>
+                        <!-- Item 4 -->
+                        <div class="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 text-center relative overflow-hidden opacity-70">
+                            <i class="ph ph-t-shirt text-4xl text-gray-400 mb-2 mt-2"></i>
+                            <h3 class="font-bold text-sm text-gray-700 mb-2">Костюм</h3>
+                            <button class="bg-app-cream text-app-orange font-bold text-xs py-2 px-4 rounded-full w-full hover:bg-app-peach transition">200 <i class="ph-fill ph-fish-simple"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Navigation Bar -->
+            <div id="bottom-nav" class="hidden h-20 bg-white border-t border-gray-100 rounded-b-[40px] px-3 flex justify-around items-center absolute bottom-0 w-full z-40">
+                <button onclick="switchScreen('home')" class="nav-btn text-app-textLight hover:text-app-orange transition flex flex-col items-center gap-1 w-[15%]" data-target="home">
+                    <i class="ph-fill ph-house text-2xl transition-transform"></i>
+                    <span class="text-[9px] font-bold">Главная</span>
+                </button>
+                <button onclick="switchScreen('food')" class="nav-btn text-app-textLight hover:text-app-orange transition flex flex-col items-center gap-1 w-[15%]" data-target="food">
+                    <i class="ph-fill ph-apple-logo text-2xl transition-transform"></i>
+                    <span class="text-[9px] font-bold">Еда</span>
+                </button>
+                <button onclick="switchScreen('tasks')" class="nav-btn text-app-textLight hover:text-app-orange transition flex flex-col items-center gap-1 w-[15%]" data-target="tasks">
+                    <i class="ph-fill ph-check-square-offset text-2xl transition-transform"></i>
+                    <span class="text-[9px] font-bold">План</span>
+                </button>
+                <button onclick="switchScreen('yoga')" class="nav-btn text-app-textLight hover:text-app-orange transition flex flex-col items-center gap-1 w-[15%]" data-target="yoga">
+                    <i class="ph-fill ph-flower-lotus text-2xl transition-transform"></i>
+                    <span class="text-[9px] font-bold">Йога</span>
+                </button>
+                <button onclick="switchScreen('meditation')" class="nav-btn text-app-textLight hover:text-app-orange transition flex flex-col items-center gap-1 w-[15%]" data-target="meditation">
+                    <i class="ph-fill ph-wind text-2xl transition-transform"></i>
+                    <span class="text-[9px] font-bold">Релакс</span>
+                </button>
+                <button onclick="switchScreen('shop')" class="nav-btn text-app-textLight hover:text-app-orange transition flex flex-col items-center gap-1 w-[15%]" data-target="shop">
+                    <i class="ph-fill ph-cat text-2xl transition-transform"></i>
+                    <span class="text-[9px] font-bold">Матвей</span>
+                </button>
+            </div>
+
+            <!-- AI Scanner Modal Overlay -->
+            <div id="ai-modal" class="hidden absolute inset-0 z-50 bg-black bg-opacity-80 backdrop-blur-sm flex flex-col">
+                <!-- Header -->
+                <div class="p-6 flex justify-between items-center text-white mt-12">
+                    <h3 class="font-bold text-lg">Определение еды ИИ</h3>
+                    <button onclick="closeAIModal()" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center"><i class="ph-bold ph-x"></i></button>
+                </div>
+                
+                <!-- Scanner Area -->
+                <div class="flex-1 relative flex items-center justify-center p-8">
+                    <!-- Fake camera feed image -->
+                    <img src="https://images.unsplash.com/photo-1495461199391-8c39ab674295?auto=format&fit=crop&q=80&w=600" class="absolute inset-0 w-full h-full object-cover opacity-50">
+                    
+                    <!-- Scanner Frame -->
+                    <div class="relative w-64 h-64 border-2 border-app-orange rounded-3xl overflow-hidden shadow-[0_0_0_999px_rgba(0,0,0,0.5)]">
+                        <div class="scanner-laser"></div>
+                        <div class="absolute top-2 left-2 w-4 h-4 border-t-4 border-l-4 border-white"></div>
+                        <div class="absolute top-2 right-2 w-4 h-4 border-t-4 border-r-4 border-white"></div>
+                        <div class="absolute bottom-2 left-2 w-4 h-4 border-b-4 border-l-4 border-white"></div>
+                        <div class="absolute bottom-2 right-2 w-4 h-4 border-b-4 border-r-4 border-white"></div>
+                    </div>
+                    <p id="scan-status" class="absolute bottom-32 text-white font-bold tracking-wide animate-pulse">Анализируем...</p>
+                </div>
+
+                <!-- Result Card (Hidden initially) -->
+                <div id="ai-result" class="hidden absolute bottom-0 left-0 w-full bg-white rounded-t-3xl p-6 slide-up pb-10">
+                    <div class="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-4"></div>
+                    <h2 class="text-xl font-extrabold text-gray-800 mb-1">Сырники со сметаной</h2>
+                    <p class="text-sm text-gray-500 mb-4">Примерный вес: 180 г</p>
+                    
+                    <div class="grid grid-cols-4 gap-2 mb-6">
+                        <div class="bg-gray-50 rounded-xl p-2 text-center border border-gray-100">
+                            <p class="text-xs text-gray-400">Ккал</p>
+                            <p class="font-bold text-gray-700">350</p>
+                        </div>
+                        <div class="bg-blue-50 rounded-xl p-2 text-center">
+                            <p class="text-xs text-blue-400">Белки</p>
+                            <p class="font-bold text-blue-700">18</p>
+                        </div>
+                        <div class="bg-yellow-50 rounded-xl p-2 text-center">
+                            <p class="text-xs text-yellow-500">Жиры</p>
+                            <p class="font-bold text-yellow-700">22</p>
+                        </div>
+                        <div class="bg-green-50 rounded-xl p-2 text-center">
+                            <p class="text-xs text-green-500">Углев</p>
+                            <p class="font-bold text-green-700">20</p>
+                        </div>
+                    </div>
+
+                    <button onclick="closeAIModal()" class="w-full bg-app-mintDark text-teal-900 font-bold text-lg py-4 rounded-3xl shadow-soft hover:bg-teal-300 transition">
+                        Добавить в дневник
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const screens = ['welcome', 'home', 'food', 'tasks', 'yoga', 'meditation', 'shop'];
+        
+        function switchScreen(targetScreen) {
+            // Hide all screens
+            screens.forEach(screen => {
+                document.getElementById('screen-' + screen).classList.add('hidden');
+            });
+            
+            // Show target screen
+            document.getElementById('screen-' + targetScreen).classList.remove('hidden');
+            
+            // Handle bottom nav visibility
+            const nav = document.getElementById('bottom-nav');
+            if (targetScreen === 'welcome') {
+                nav.classList.add('hidden');
+            } else {
+                nav.classList.remove('hidden');
+                updateNavState(targetScreen);
+            }
+        }
+
+        function updateNavState(activeTarget) {
+            const btns = document.querySelectorAll('.nav-btn');
+            btns.forEach(btn => {
+                const target = btn.getAttribute('data-target');
+                const icon = btn.querySelector('i');
+                if (target === activeTarget) {
+                    btn.classList.remove('text-app-textLight');
+                    btn.classList.add('text-app-orange');
+                    icon.classList.add('-translate-y-1');
+                } else {
+                    btn.classList.add('text-app-textLight');
+                    btn.classList.remove('text-app-orange');
+                    icon.classList.remove('-translate-y-1');
+                }
+            });
+        }
+
+        // AI Modal Logic
+        let scanTimeout;
+        function openAIModal() {
+            const modal = document.getElementById('ai-modal');
+            const resultCard = document.getElementById('ai-result');
+            const statusText = document.getElementById('scan-status');
+            
+            modal.classList.remove('hidden');
+            resultCard.classList.add('hidden');
+            statusText.classList.remove('hidden');
+            
+            // Simulate scanning delay
+            scanTimeout = setTimeout(() => {
+                statusText.classList.add('hidden');
+                resultCard.classList.remove('hidden');
+            }, 2500);
+        }
+
+        function closeAIModal() {
+            document.getElementById('ai-modal').classList.add('hidden');
+            clearTimeout(scanTimeout);
+        }
+
+        // Initialize checkboxes to show slight animation (optional)
+        document.querySelectorAll('.task-checkbox').forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                // You could trigger a confetti animation here
+            });
+        });
+    </script>
+</body>
+</html>
