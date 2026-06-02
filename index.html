@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Легкость с Котом - Полная версия</title>
     
+    <!-- Иконки приложения -->
+    <link rel="icon" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    
     <!-- Подключение Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
@@ -64,6 +68,7 @@
 </head>
 <body class="text-app-text h-screen flex flex-col overflow-hidden relative">
 
+    <!-- Уведомления (Toast) -->
     <div id="toast-container" class="absolute top-4 left-1/2 transform -translate-x-1/2 z-[100] w-max max-w-[90%] pointer-events-none transition-all duration-300 opacity-0 -translate-y-5">
         <div class="bg-gray-800 bg-opacity-90 backdrop-blur-sm text-white px-5 py-3 rounded-full shadow-lg font-bold text-sm flex items-center gap-2">
             <i class="ph-fill ph-info text-app-orange text-lg"></i>
@@ -71,9 +76,9 @@
         </div>
     </div>
 
-    <!-- Основной контент -->
     <main id="app-content" class="flex-1 overflow-y-auto no-scrollbar pb-6 pt-2 px-4 relative">
         
+        <!-- ГЛАВНЫЙ ЭКРАН -->
         <section id="screen-home" class="fade-in block min-h-full py-4">
             <!-- Header -->
             <div class="flex items-center justify-between gap-4 mb-6 mt-2">
@@ -136,18 +141,19 @@
                     <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm"><i class="ph-fill ph-crown text-yellow-500 text-xl"></i></div>
                     <div class="text-left">
                         <h3 class="font-bold text-yellow-900 text-sm">Легкость Premium</h3>
-                        <p class="text-xs text-yellow-700">Разблокировать все функции</p>
+                        <p class="text-xs text-yellow-700">Все возможности</p>
                     </div>
                 </div>
                 <i class="ph-bold ph-caret-right text-yellow-600"></i>
             </button>
         </section>
 
+        <!-- ЭКРАН ПИТАНИЯ -->
         <section id="screen-food" class="fade-in hidden min-h-full py-4">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-extrabold text-gray-800">Питание</h2>
                 <button onclick="openManualFoodModal()" class="bg-app-mintDark text-teal-900 px-4 py-1.5 rounded-full font-bold text-sm shadow-sm hover:bg-teal-300 transition active:scale-95 flex items-center gap-1">
-                    <i class="ph-bold ph-plus"></i> Добавить
+                    <i class="ph-bold ph-plus"></i> Вручную
                 </button>
             </div>
             
@@ -184,25 +190,41 @@
                 </div>
             </div>
 
-            <button onclick="openAIModal()" class="w-full mb-6 bg-gradient-to-r from-app-peachDark to-app-orange text-white rounded-3xl p-4 shadow-soft flex items-center justify-center gap-3 transform transition active:scale-95">
+            <!-- Добавление еды по фото -->
+            <label class="w-full mb-6 bg-gradient-to-r from-app-peachDark to-app-orange text-white rounded-3xl p-4 shadow-soft flex items-center justify-center gap-3 transform transition active:scale-95 cursor-pointer">
                 <i class="ph-fill ph-camera text-2xl"></i>
                 <span class="font-bold text-lg">Определить по фото</span>
-                <div class="bg-white text-app-orange text-[10px] font-extrabold px-2 py-1 rounded-lg uppercase">ИИ</div>
-            </button>
+                <input type="file" accept="image/*" capture="camera" class="hidden" onchange="handleFoodPhoto(event)">
+            </label>
 
             <div id="ui-food-list" class="space-y-3 pb-4"></div>
         </section>
 
+        <!-- ЭКРАН ПЛАНА (ЗАДАНИЯ) -->
         <section id="screen-tasks" class="fade-in hidden min-h-full py-4">
             <h2 class="text-2xl font-extrabold mb-2 text-center text-gray-800">План на сегодня</h2>
             <p class="text-center text-sm text-gray-500 mb-6">Отмечайте задания и получайте по 10 <i class="ph-fill ph-fish-simple text-blue-400"></i></p>
             <div class="space-y-4" id="tasks-container"></div>
         </section>
 
+        <!-- ЭКРАН ЙОГИ -->
         <section id="screen-yoga" class="fade-in hidden min-h-full py-4">
             <h2 class="text-2xl font-extrabold mb-6 text-center text-gray-800">Йога и Здоровье</h2>
             
-            <div class="bg-app-mint bg-opacity-30 rounded-3xl p-5 mb-4 shadow-sm flex items-center justify-between hover:bg-opacity-50 transition cursor-pointer active:scale-95" onclick="playVideo('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'Здоровая спина (Демо)')">
+            <!-- Добавление своего видео -->
+            <label class="w-full bg-white rounded-3xl p-4 shadow-sm border-2 border-dashed border-indigo-200 flex items-center justify-center gap-3 cursor-pointer mb-4 hover:bg-gray-50 transition active:scale-95">
+                <i class="ph-bold ph-upload-simple text-indigo-500 text-xl"></i>
+                <span class="font-bold text-indigo-700">Загрузить свое видео</span>
+                <input type="file" accept="video/*" class="hidden" onchange="handleCustomVideo(event)">
+            </label>
+
+            <!-- Плеер для своего видео (скрыт по умолчанию) -->
+            <div id="custom-video-container" class="hidden mb-6 bg-black rounded-3xl overflow-hidden shadow-card relative">
+                <button onclick="closeCustomVideo()" class="absolute top-2 right-2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center z-10 active:scale-90"><i class="ph-bold ph-x"></i></button>
+                <video id="custom-video-player" controls class="w-full max-h-60 object-contain"></video>
+            </div>
+            
+            <div onclick="comingSoonToast()" class="bg-app-mint bg-opacity-30 rounded-3xl p-5 mb-4 shadow-sm flex items-center justify-between hover:bg-opacity-50 transition cursor-pointer active:scale-95">
                 <div>
                     <h3 class="font-bold text-teal-900 mb-1">Здоровая спина</h3>
                     <p class="text-xs text-teal-700">Мягкий комплекс (15 мин)</p>
@@ -210,7 +232,7 @@
                 <button class="w-10 h-10 bg-teal-500 text-white rounded-full flex items-center justify-center shadow-sm"><i class="ph-fill ph-play text-xl"></i></button>
             </div>
             
-            <div class="bg-app-peach bg-opacity-30 rounded-3xl p-5 mb-4 shadow-sm flex items-center justify-between hover:bg-opacity-50 transition cursor-pointer active:scale-95" onclick="playVideo('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', 'Утренняя разминка (Демо)')">
+            <div onclick="comingSoonToast()" class="bg-app-peach bg-opacity-30 rounded-3xl p-5 mb-4 shadow-sm flex items-center justify-between hover:bg-opacity-50 transition cursor-pointer active:scale-95">
                 <div>
                     <h3 class="font-bold text-orange-900 mb-1">Утренняя разминка</h3>
                     <p class="text-xs text-orange-700">Заряд бодрости (10 мин)</p>
@@ -218,26 +240,16 @@
                 <button class="w-10 h-10 bg-orange-400 text-white rounded-full flex items-center justify-center shadow-sm"><i class="ph-fill ph-play text-xl"></i></button>
             </div>
             
-            <div id="yoga-premium-card" onclick="handlePremiumYoga()" class="bg-indigo-50 rounded-3xl p-5 mb-4 border border-indigo-100 flex items-center justify-between transition cursor-pointer active:scale-95">
+            <div onclick="comingSoonToast()" class="bg-indigo-50 rounded-3xl p-5 mb-4 border border-indigo-100 flex items-center justify-between transition cursor-pointer active:scale-95">
                 <div>
-                    <h3 id="yoga-premium-title" class="font-bold text-indigo-900 mb-1">Шея и суставы <i id="yoga-lock-icon" class="ph-bold ph-lock-key text-indigo-400 ml-1"></i></h3>
+                    <h3 class="font-bold text-indigo-900 mb-1">Шея и суставы</h3>
                     <p class="text-xs text-indigo-700">Снятие напряжения (20 мин)</p>
                 </div>
-                <div id="yoga-premium-btn">
-                    <button class="bg-white border border-indigo-200 text-indigo-500 font-bold text-xs py-2 px-3 rounded-full shadow-sm flex items-center gap-1">50 <i class="ph-fill ph-fish-simple"></i></button>
-                </div>
-            </div>
-
-            <div class="mt-8 border-t border-gray-100 pt-6">
-                <label class="w-full bg-white border-2 border-dashed border-teal-300 text-teal-700 rounded-3xl p-6 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-teal-50 transition active:scale-95">
-                    <i class="ph-bold ph-upload-simple text-4xl text-teal-400"></i>
-                    <span class="font-bold text-lg">Свое видео</span>
-                    <span class="text-xs text-gray-400 text-center px-4">Нажмите, чтобы загрузить тренировку из телефона</span>
-                    <input type="file" id="video-upload" accept="video/*" class="hidden" onchange="handleVideoUpload(event)">
-                </label>
+                <button class="w-10 h-10 bg-indigo-400 text-white rounded-full flex items-center justify-center shadow-sm"><i class="ph-fill ph-play text-xl"></i></button>
             </div>
         </section>
 
+        <!-- ЭКРАН РЕЛАКС -->
         <section id="screen-relax" class="fade-in hidden text-center h-full flex flex-col justify-center py-10">
             <h2 class="text-2xl font-extrabold mb-8 text-gray-800">Релакс</h2>
             <p class="text-sm text-gray-500 mb-12 px-4">Дышите в такт кругу, чтобы восстановить силы.</p>
@@ -248,6 +260,7 @@
             </div>
         </section>
 
+        <!-- ЭКРАН МАГАЗИНА (КОТИК) -->
         <section id="screen-shop" class="fade-in hidden min-h-full py-4 text-center">
             <div class="flex items-center justify-between mb-6 px-2">
                 <h2 class="text-2xl font-extrabold text-gray-800">Магазин</h2>
@@ -264,6 +277,7 @@
             <div class="grid grid-cols-2 gap-4 text-left px-2" id="shop-container"></div>
         </section>
 
+        <!-- ЭКРАН PREMIUM -->
         <section id="screen-premium" class="fade-in hidden min-h-full p-6 text-center flex flex-col items-center justify-center bg-gradient-to-b from-app-peachDark to-app-orange relative z-20 rounded-3xl mt-2 mb-4 mx-2">
             <button onclick="switchScreen('home')" class="absolute top-4 left-4 w-10 h-10 bg-white bg-opacity-30 rounded-full flex items-center justify-center text-white active:scale-90 transition"><i class="ph-bold ph-arrow-left"></i></button>
             <i class="ph-fill ph-star text-6xl text-yellow-300 mb-4 mt-8 drop-shadow-md"></i>
@@ -272,19 +286,20 @@
 
             <div class="bg-white rounded-3xl p-6 shadow-xl w-full text-left mb-8 text-gray-700">
                 <ul class="space-y-4">
-                    <li class="flex items-center gap-3"><i class="ph-bold ph-magic-wand text-app-orange text-xl"></i> <b>Безлимитный ИИ</b> для еды</li>
+                    <li class="flex items-center gap-3"><i class="ph-bold ph-magic-wand text-app-orange text-xl"></i> <b>Быстрое добавление</b> еды</li>
                     <li class="flex items-center gap-3"><i class="ph-bold ph-flower-lotus text-app-mintDark text-xl"></i> <b>Все уроки</b> йоги 45+</li>
                     <li class="flex items-center gap-3"><i class="ph-bold ph-calculator text-blue-400 text-xl"></i> <b>Глубокий анализ</b> КБЖУ</li>
                     <li class="flex items-center gap-3"><i class="ph-bold ph-cat text-yellow-500 text-xl"></i> <b>Золотой статус</b> для Матвея</li>
                 </ul>
             </div>
 
-            <button onclick="buyPremium()" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 font-extrabold text-xl py-4 rounded-3xl shadow-lg transform transition hover:scale-105 active:scale-95 flex justify-center items-center gap-2">
-                <i class="ph-fill ph-telegram-logo text-2xl"></i> Оплатить 150 Stars
+            <button onclick="buyPremium()" class="w-full bg-gray-50 text-gray-500 font-extrabold text-lg py-4 rounded-3xl shadow-sm transform transition active:scale-95 flex justify-center items-center gap-2">
+                Premium скоро будет доступен
             </button>
-            <p class="text-xs text-white opacity-80 mt-4">Официальная оплата через Telegram</p>
+            <p class="text-xs text-white opacity-80 mt-4">Официальная оплата через Telegram Stars</p>
         </section>
 
+        <!-- МОДАЛКИ -->
         
         <!-- Кастомный Prompt (Вместо alert/confirm) -->
         <div id="custom-prompt" class="hidden absolute inset-0 z-[70] bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -311,18 +326,26 @@
             </div>
         </div>
 
-        <!-- ИИ Сканер Еды -->
-        <div id="ai-modal" class="hidden absolute inset-0 z-[70] bg-black bg-opacity-80 backdrop-blur-md flex flex-col items-center justify-center p-4">
-            <button onclick="closeAIModal()" class="absolute top-6 right-6 text-white text-3xl"><i class="ph-bold ph-x"></i></button>
-            <div id="scan-status" class="text-center text-white">
-                <i class="ph-bold ph-spinner-gap text-5xl animate-spin text-app-orange mb-4"></i>
-                <p class="font-bold text-lg">Матвей изучает фото...</p>
-            </div>
-            <div id="ai-result" class="hidden bg-white rounded-[30px] p-6 w-full max-w-sm text-center slide-up">
-                <h3 class="font-extrabold text-2xl text-gray-800 mb-1">Сырники</h3>
-                <p class="text-gray-500 mb-6">со сметаной, 200г</p>
-                <div class="flex justify-center items-end gap-2 mb-6 text-app-orange"><span class="text-5xl font-extrabold">350</span><span class="font-bold mb-1">ккал</span></div>
-                <button onclick="addAIFoodToDiary()" class="w-full bg-app-mintDark text-teal-900 font-bold py-4 rounded-full active:scale-95 transition">Добавить в дневник</button>
+        <!-- Добавление Еды (По Фото) -->
+        <div id="photo-food-modal" class="hidden absolute inset-0 z-[75] bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-6 w-full max-w-sm slide-up max-h-screen overflow-y-auto no-scrollbar">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800 text-lg">Данные о блюде</h3>
+                    <button onclick="closePhotoFoodModal()" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 active:scale-90"><i class="ph-bold ph-x"></i></button>
+                </div>
+                
+                <img id="photo-food-preview" src="" alt="Ваше фото" class="w-full h-40 object-cover rounded-2xl mb-4 hidden border border-gray-200">
+                
+                <input id="photo-food-name" type="text" placeholder="Название блюда" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 mb-3 outline-none text-sm">
+                
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    <input id="photo-food-cals" type="number" placeholder="Калории (ккал)" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none text-sm">
+                    <input id="photo-food-p" type="number" placeholder="Белки (г)" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none text-sm">
+                    <input id="photo-food-f" type="number" placeholder="Жиры (г)" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none text-sm">
+                    <input id="photo-food-c" type="number" placeholder="Углеводы (г)" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none text-sm">
+                </div>
+                
+                <button onclick="savePhotoFood()" class="w-full bg-app-mintDark text-teal-900 font-bold py-4 rounded-full active:scale-95 transition">Добавить в дневник</button>
             </div>
         </div>
 
@@ -373,15 +396,6 @@
             </div>
         </div>
 
-        <!-- Видеоплеер -->
-        <div id="video-modal" class="hidden absolute inset-0 z-[80] bg-black flex flex-col justify-center items-center">
-            <div class="w-full absolute top-0 left-0 p-4 flex justify-between items-center z-10 bg-gradient-to-b from-black/80 to-transparent">
-                <p id="video-title" class="text-white font-bold truncate pr-4">Плеер</p>
-                <button onclick="closeVideo()" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white active:scale-90"><i class="ph-bold ph-x text-xl"></i></button>
-            </div>
-            <video id="app-video-player" controls class="w-full h-auto max-h-screen outline-none bg-black" playsinline></video>
-        </div>
-
     </main>
 
     <nav class="bg-white border-t border-gray-100 h-20 px-2 flex justify-between items-center shrink-0 w-full relative z-40 pb-2">
@@ -415,7 +429,7 @@
             macros: { cals: 1600, p: 80, f: 60, c: 180 },
             tasks: { water: false, steps: false, yoga: false, sleep: false },
             foodLog: [], profile: { gender: 'female', age: 45, height: 165, activity: 1.2 },
-            inventory: { glasses: false, cap: false, bowtie: false, crown: false, yogaPremium: false, premium: false },
+            inventory: { glasses: false, cap: false, bowtie: false, crown: false, premium: false },
             activeAccessory: null, lastLogin: new Date().toLocaleDateString()
         };
 
@@ -433,7 +447,7 @@
             updateUI();
         }
 
-        // --- Уведомления и Модалки (Без alert/confirm) ---
+        // --- Уведомления и Модалки ---
         let toastTimeout;
         function showToast(message) {
             const container = document.getElementById('toast-container');
@@ -574,21 +588,10 @@
                     ${btnHtml}
                 </div>`;
             });
-
-            // Йога Премиум
-            const yCard = document.getElementById('yoga-premium-card');
-            const yBtn = document.getElementById('yoga-premium-btn');
-            const yLock = document.getElementById('yoga-lock-icon');
-            if (appState.inventory['yogaPremium']) {
-                yCard.className = "bg-indigo-500 rounded-3xl p-5 mb-4 shadow-lg flex items-center justify-between transition cursor-pointer text-white active:scale-95";
-                document.getElementById('yoga-premium-title').className = "font-bold text-white mb-1";
-                document.getElementById('yoga-premium-title').nextElementSibling.className = "text-xs text-indigo-100";
-                yLock.classList.add('hidden');
-                yBtn.innerHTML = `<button class="w-10 h-10 bg-white text-indigo-500 rounded-full flex items-center justify-center shadow-sm"><i class="ph-fill ph-play text-xl"></i></button>`;
-            }
         }
 
-        // --- Логика Действий ---
+        // --- STREAMING_CHUNK:Event Handlers ---
+        // Действия Главная
         function updateWeightPrompt() {
             showCustomPrompt("Ваш текущий вес (кг)", appState.weight, (val) => {
                 if (val && !isNaN(val)) { appState.weight = parseFloat(val); saveState(); showToast("Вес обновлен!"); }
@@ -618,7 +621,7 @@
             saveState();
         }
 
-        // Питание
+        // Питание - Ручной ввод
         function openManualFoodModal() {
             document.getElementById('food-name-input').value = '';
             document.getElementById('food-cals-input').value = '';
@@ -635,19 +638,56 @@
         }
         function deleteFood(id) { appState.foodLog = appState.foodLog.filter(f=>f.id!==id); saveState(); }
 
-        let aiTimeout;
-        function openAIModal() {
-            document.getElementById('ai-modal').classList.remove('hidden');
-            document.getElementById('scan-status').classList.remove('hidden'); document.getElementById('ai-result').classList.add('hidden');
-            aiTimeout = setTimeout(() => { document.getElementById('scan-status').classList.add('hidden'); document.getElementById('ai-result').classList.remove('hidden'); }, 1500);
+        // Питание - Загрузка по фото
+        function handleFoodPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('photo-food-preview');
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    
+                    document.getElementById('photo-food-name').value = '';
+                    document.getElementById('photo-food-cals').value = '';
+                    document.getElementById('photo-food-p').value = '';
+                    document.getElementById('photo-food-f').value = '';
+                    document.getElementById('photo-food-c').value = '';
+                    
+                    document.getElementById('photo-food-modal').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+            event.target.value = ''; 
         }
-        function closeAIModal() { document.getElementById('ai-modal').classList.add('hidden'); clearTimeout(aiTimeout); }
-        function addAIFoodToDiary() { appState.foodLog.push({ id: Date.now(), name: "Сырники", cals: 350, p: 18, f: 22, c: 20 }); saveState(); closeAIModal(); showToast("Сырники добавлены!"); }
+        function closePhotoFoodModal() {
+            document.getElementById('photo-food-modal').classList.add('hidden');
+        }
+        function savePhotoFood() {
+            let n = document.getElementById('photo-food-name').value;
+            let cals = document.getElementById('photo-food-cals').value;
+            let p = document.getElementById('photo-food-p').value || 0;
+            let f = document.getElementById('photo-food-f').value || 0;
+            let c = document.getElementById('photo-food-c').value || 0;
+
+            if(n && cals && !isNaN(cals)) {
+                appState.foodLog.push({ id: Date.now(), name: n, cals: +cals, p: +p, f: +f, c: +c });
+                saveState(); closePhotoFoodModal(); showToast("Успешно добавлено!");
+            } else {
+                showToast("Укажите название и калории!");
+            }
+        }
 
         // Калькулятор
         function openCalcModal() { 
             document.getElementById('calc-form').classList.remove('hidden');
             document.getElementById('calc-result').classList.add('hidden');
+            
+            document.getElementById('calc-gender').value = appState.profile.gender;
+            document.getElementById('calc-age').value = appState.profile.age;
+            document.getElementById('calc-height').value = appState.profile.height;
+            document.getElementById('calc-weight').value = appState.weight;
+            
             document.getElementById('calc-modal').classList.remove('hidden'); 
         }
         function closeCalcModal() { document.getElementById('calc-modal').classList.add('hidden'); }
@@ -677,7 +717,12 @@
         }
         function applyCalcResult() {
             if (tempMacros) {
-                appState.macros = tempMacros; appState.weight = parseFloat(document.getElementById('calc-weight').value);
+                appState.macros = tempMacros; 
+                appState.weight = parseFloat(document.getElementById('calc-weight').value);
+                appState.profile.gender = document.getElementById('calc-gender').value;
+                appState.profile.age = parseInt(document.getElementById('calc-age').value);
+                appState.profile.height = parseInt(document.getElementById('calc-height').value);
+                
                 saveState(); closeCalcModal(); showToast(`Норма сохранена: ${tempMacros.cals} ккал`);
             }
         }
@@ -692,47 +737,37 @@
         function equipItem(id) { appState.activeAccessory = id; saveState(); showToast("Надето!"); }
 
         // Йога
-        function handlePremiumYoga() {
-            if (appState.inventory['yogaPremium']) {
-                playVideo('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', 'Шея и суставы');
-            } else {
-                if(appState.fishes >= 50) {
-                    appState.fishes -= 50; appState.inventory['yogaPremium'] = true;
-                    saveState(); showToast("Урок разблокирован! 🐟");
-                } else showToast("Накопите 50 рыбок для открытия 🐟");
-            }
+        function comingSoonToast() {
+            showToast("Видео-урок скоро будет добавлен");
         }
-        function playVideo(url, title) {
-            const modal = document.getElementById('video-modal');
-            const player = document.getElementById('app-video-player');
-            document.getElementById('video-title').innerText = title || "Плеер";
-            player.src = url; modal.classList.remove('hidden');
-            player.play().catch(e => showToast("Нажмите Play на плеере"));
-        }
-        function closeVideo() {
-            const modal = document.getElementById('video-modal');
-            const player = document.getElementById('app-video-player');
-            player.pause(); player.src = ""; modal.classList.add('hidden');
-        }
-        function handleVideoUpload(event) {
+
+        function handleCustomVideo(event) {
             const file = event.target.files[0];
             if (file) {
-                const videoUrl = URL.createObjectURL(file);
-                playVideo(videoUrl, file.name);
-                event.target.value = '';
+                const videoURL = URL.createObjectURL(file);
+                const player = document.getElementById('custom-video-player');
+                const container = document.getElementById('custom-video-container');
+                
+                player.src = videoURL;
+                container.classList.remove('hidden');
+                player.play();
+                showToast("Видео загружено!");
             }
+            event.target.value = ''; // Сброс инпута
+        }
+
+        function closeCustomVideo() {
+            const player = document.getElementById('custom-video-player');
+            const container = document.getElementById('custom-video-container');
+            
+            player.pause();
+            player.src = '';
+            container.classList.add('hidden');
         }
 
         // Premium
         function buyPremium() {
-            showToast("Подключение к Stars...");
-            setTimeout(() => {
-                appState.inventory['premium'] = true;
-                appState.inventory['yogaPremium'] = true; // Открываем йогу
-                saveState();
-                showToast("Premium активирован! 🌟");
-                switchScreen('home');
-            }, 1500);
+            showToast("Платная подписка будет подключена позже через Telegram Stars");
         }
 
         // Навигация
